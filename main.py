@@ -22,7 +22,7 @@ def create_data_file(data_file):
     """
     with open(data_file, 'w') as f:
         writer = csv.writer(f)
-        header = ("Counter", "Photo","Day", "Date/time", "Latitude", "Longitude","Elevation", "Ground", "Ocean", "Dark")
+        header = ("Counter", "Photo","Night", "Date/time", "Latitude", "Longitude","Elevation", "Ground", "Ocean", "Dark")
         writer.writerow(header)
 
 
@@ -46,13 +46,13 @@ def recognize_image(counter):
     """
     results = {}
     size = common.input_size(interpreter)
-    image = Image.open(base_folder / "photos" / f"image_{counter:04d}.jpg").convert('RGB').resize(size, Image.ANTIALIAS)
+    image = Image.open(base_folder / "photos" / f"image_{counter:04d}.jpg").convert('RGB').resize(size, Image.Resampling.LANCZOS)
     common.set_input(interpreter, image)
     interpreter.invoke()
     classes = classify.get_classes(interpreter, top_k=3)
     labels = read_label_file(label_file)
     for c in classes:
-        results.update({labels.get(c.id, c.id): 100 * int(f"{c.score:.5f}")})
+        results.update({labels.get(c.id, c.id): 100 * float(f"{c.score:.5f}")})
     return results
 
 
@@ -107,7 +107,7 @@ os.mkdir(f"{base_folder}/photos")
 logfile(base_folder / "events.log")
 
 # Initializing main data.csv file
-main_data = open(f"{base_folder}/data.csv", "w")
+main_data = base_folder/"data.csv"
 create_data_file(main_data)
 
 # Initializing camera
@@ -123,13 +123,13 @@ interpreter = make_interpreter(f"{model_file}")
 interpreter.allocate_tensors()
 
 # This counts how many times the main loop was executed
-counter = 0
+counter = 1
 
 # Time when the main loop was last executed
 now_time = datetime.now()
 
 # Main loop of the program
-while (now_time < start_time + timedelta(minutes=180-0.5)):
+while (now_time < start_time + timedelta(minutes=3)):
     try:
         # Loads the ISS location in current time
         location = ISS.coordinates()
@@ -145,7 +145,7 @@ while (now_time < start_time + timedelta(minutes=180-0.5)):
         t = timescale.now()
 
         # Creating one row in data.csv
-        data = (counter, "image_{counter:04d}.jpg",ISS.at(t).is_sunlit(ephemeris),datetime.now(), location.latitude.degrees, location.longtitude.degrees, location.elevation.km, results["ground"], results["ocean"], results["dark"])
+        data = (counter, f"image_{counter:04d}.jpg",ISS.at(t).is_sunlit(ephemeris),datetime.now(), location.latitude.degrees, location.longitude.degrees, location.elevation.km, results["ground"], results["ocean"], results["dark"])
 
         # Adding the row to data.csv
         add_data_file(main_data, data)
@@ -159,11 +159,12 @@ while (now_time < start_time + timedelta(minutes=180-0.5)):
 
         # Decides wheater to take pictures in night or in day
         if ISS.at(t).is_sunlit(ephemeris):
-            sleep(15)
-            logger.info("Waiting 15 seconds for next loop")
-        else:
-            sleep(20)
             logger.info("Waiting 20 seconds for next loop")
+            sleep(20)
+        else:
+            logger.info("Waiting 15 seconds for next loop")
+            sleep(15)
+            
 
         # Sets the current time
         now_time = datetime.now()
