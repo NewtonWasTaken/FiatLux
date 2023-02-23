@@ -47,6 +47,8 @@ def recognize_image(counter):
     :param counter: Takes the counter of the main loop
     :return: Returns dict with results
     """
+
+    #Here the probability from the Coral model will be stored
     results = {}
     size = common.input_size(interpreter)
     image = Image.open(base_folder / "photos" / f"image_{counter:04d}.jpg").convert('RGB').resize(size, Image.Resampling.LANCZOS)
@@ -140,11 +142,11 @@ while (now_time < start_time + timedelta(minutes=3)):
 
         # Takes photo and sings the information about location into to photo
         take_photo(counter, location)
-        logging.info(f"Took photo: image_{counter:04d.jpg}")
+        logging.info(f"Took photo: image_{counter:04d}.jpg")
 
         # Recognizes the image based on the Coral model
         results = recognize_image(counter)
-        logging.info(f"Processed photo image_{counter:04d.jpg} with Coral model")
+        logging.info(f"Processed photo image_{counter:04d}.jpg with Coral model")
 
 
         # Initializing time for checking if it is day or night
@@ -156,7 +158,7 @@ while (now_time < start_time + timedelta(minutes=3)):
 
         # Adding the row to data.csv
         add_data_file(main_data, data)
-        logging.info(f"Wrote data about photo image_{counter:04d.jpg} to data.csv")
+        logging.info(f"Wrote data about photo image_{counter:04d}.jpg to data.csv")
 
         #Logging the loop
         logger.info(f"Completed {counter}. loop")
