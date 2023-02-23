@@ -125,7 +125,7 @@ create_data_file(main_data)
 
 # Initializing camera
 camera = PiCamera()
-camera.resolution = (2592, 1944)
+camera.resolution = (4056, 3040)
 
 # Initializing the model for ML Coral
 model_file = base_folder / 'ground-vs-ocean-model.tflite'
