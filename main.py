@@ -1,4 +1,3 @@
-import logging
 from time import sleep
 from picamera import PiCamera
 from pathlib import Path
@@ -150,11 +149,11 @@ while (now_time < start_time + timedelta(minutes=180-0.5)):
 
         # Takes photo and signs the information about location into to photo
         take_photo(counter, location)
-        logging.info(f"Took photo: image_{counter:04d}.jpg")
+        logger.info(f"Took photo: image_{counter:04d}.jpg")
 
         # Recognizes the image based on the Coral model
         results = recognize_image(counter)
-        logging.info(f"Processed photo image_{counter:04d}.jpg with Coral model")
+        logger.info(f"Processed photo image_{counter:04d}.jpg with Coral model")
 
 
         # Initializing time for checking if it is day or night
@@ -166,7 +165,7 @@ while (now_time < start_time + timedelta(minutes=180-0.5)):
 
         # Adding the row to data.csv
         add_data_file(main_data, data)
-        logging.info(f"Wrote data about photo image_{counter:04d}.jpg to data.csv")
+        logger.info(f"Wrote data about photo image_{counter:04d}.jpg to data.csv")
 
         # Logging the loop
         logger.info(f"Completed {counter}. loop")
