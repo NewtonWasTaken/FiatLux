@@ -47,18 +47,26 @@ def recognize_image(counter):
     :param counter: Takes the counter of the main loop
     :return: Returns dict with results
     """
-
-    #Here the probability from the Coral model will be stored
+    # Here the probability from the Coral model will be stored
     results = {}
+
+    # Changing the size of the image to fit with the model
     size = common.input_size(interpreter)
     image = Image.open(base_folder / "photos" / f"image_{counter:04d}.jpg").convert('RGB').resize(size, Image.Resampling.LANCZOS)
+
+    # Running the rescaled image through the model
     common.set_input(interpreter, image)
     interpreter.invoke()
+
+    # Getting the results
     classes = classify.get_classes(interpreter, top_k=3)
     labels = read_label_file(label_file)
+
+    # Converting the results to percentage and storing it in the results dictionary
     for c in classes:
         results.update({labels.get(c.id, c.id): 100 * float(f"{c.score:.5f}")})
     image.close()
+
     return results
 
 
@@ -70,7 +78,7 @@ def take_photo(counter, location):
     :return:
     """
 
-    # Location of the photo
+    # File location of the photo
     image_file = f"{base_folder}/photos/image_{counter:04d}.jpg"
 
     # Convert the location data to EXIF format
@@ -135,12 +143,12 @@ counter = 1
 now_time = datetime.now()
 
 # Main loop of the program
-while (now_time < start_time + timedelta(minutes=3)):
+while (now_time < start_time + timedelta(minutes=180-0.5)):
     try:
         # Loads the ISS location in current time
         location = ISS.coordinates()
 
-        # Takes photo and sings the information about location into to photo
+        # Takes photo and signs the information about location into to photo
         take_photo(counter, location)
         logging.info(f"Took photo: image_{counter:04d}.jpg")
 
@@ -160,14 +168,14 @@ while (now_time < start_time + timedelta(minutes=3)):
         add_data_file(main_data, data)
         logging.info(f"Wrote data about photo image_{counter:04d}.jpg to data.csv")
 
-        #Logging the loop
+        # Logging the loop
         logger.info(f"Completed {counter}. loop")
 
         # Completes cycle
         counter += 1
 
 
-        # Decides wheater to take pictures in night or in day
+        # Decides if to take pictures in night or in day
         if ISS.at(t).is_sunlit(ephemeris):
             logger.info("Waiting 15 seconds for next loop")
             sleep(15)
@@ -183,3 +191,5 @@ while (now_time < start_time + timedelta(minutes=3)):
 
     except Exception as e:
         logger.error(f'{e.__class__.__name__}: {e})')
+
+camera.close()
