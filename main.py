@@ -22,7 +22,7 @@ def create_data_file(data_file):
     """
     with open(data_file, 'w') as f:
         writer = csv.writer(f)
-        header = ("Counter", "Photo","Night", "Date/time", "Latitude", "Longitude","Elevation", "Ground", "Ocean", "Dark")
+        header = ("Counter", "Photo","Day", "Date/time", "Latitude", "Longitude","Elevation", "Ground", "Ocean", "Dark")
         writer.writerow(header)
 
 
@@ -58,7 +58,7 @@ def recognize_image(counter):
 
 def take_photo(counter, location):
     """
-    Takes photo, which has asigned the EXIF data
+    Takes photo, with asigned EXIF data
     :param counter: Takes counter from main loop
     :param location: Takes ISS.coordinates object
     :return:
@@ -94,7 +94,7 @@ def convert(angle):
     return sign < 0, exif_angle
 
 
-# This variable should be on the very top to have the start time accurate
+# Time when the program was started
 start_time = datetime.now()
 
 # Folder of where the main.py is stored
@@ -159,11 +159,11 @@ while (now_time < start_time + timedelta(minutes=3)):
 
         # Decides wheater to take pictures in night or in day
         if ISS.at(t).is_sunlit(ephemeris):
-            logger.info("Waiting 20 seconds for next loop")
-            sleep(20)
-        else:
             logger.info("Waiting 15 seconds for next loop")
             sleep(15)
+        else:
+            logger.info("Waiting 20 seconds for next loop")
+            sleep(20)
             
 
         # Sets the current time
