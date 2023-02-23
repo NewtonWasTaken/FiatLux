@@ -1,3 +1,4 @@
+import logging
 from time import sleep
 from picamera import PiCamera
 from pathlib import Path
@@ -24,7 +25,8 @@ def create_data_file(data_file):
         writer = csv.writer(f)
         header = ("Counter", "Photo","Day", "Date/time", "Latitude", "Longitude","Elevation", "Ground", "Ocean", "Dark")
         writer.writerow(header)
-
+        f.flush()
+        os.fsync(f.fileno())
 
 def add_data_file(data_file, data):
     """
@@ -36,7 +38,8 @@ def add_data_file(data_file, data):
     with open(data_file, 'a') as f:
         writer = csv.writer(f)
         writer.writerow(data)
-
+        f.flush()
+        os.fsync(f.fileno())
 
 def recognize_image(counter):
     """
@@ -53,6 +56,7 @@ def recognize_image(counter):
     labels = read_label_file(label_file)
     for c in classes:
         results.update({labels.get(c.id, c.id): 100 * float(f"{c.score:.5f}")})
+    image.close()
     return results
 
 
@@ -136,9 +140,12 @@ while (now_time < start_time + timedelta(minutes=3)):
 
         # Takes photo and sings the information about location into to photo
         take_photo(counter, location)
+        logging.info(f"Took photo: image_{counter:04d.jpg}")
 
         # Recognizes the image based on the Coral model
         results = recognize_image(counter)
+        logging.info(f"Processed photo image_{counter:04d.jpg} with Coral model")
+
 
         # Initializing time for checking if it is day or night
         timescale = load.timescale()
@@ -149,6 +156,7 @@ while (now_time < start_time + timedelta(minutes=3)):
 
         # Adding the row to data.csv
         add_data_file(main_data, data)
+        logging.info(f"Wrote data about photo image_{counter:04d.jpg} to data.csv")
 
         #Logging the loop
         logger.info(f"Completed {counter}. loop")
@@ -161,9 +169,11 @@ while (now_time < start_time + timedelta(minutes=3)):
         if ISS.at(t).is_sunlit(ephemeris):
             logger.info("Waiting 15 seconds for next loop")
             sleep(15)
+            logger.info(f"Loop took {datetime.now() - now_time} to finish")
         else:
             logger.info("Waiting 20 seconds for next loop")
             sleep(20)
+            logger.info(f"Loop took {datetime.now() - now_time} to finish")
             
 
         # Sets the current time
