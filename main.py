@@ -176,12 +176,12 @@ while (now_time < start_time + timedelta(minutes=180-0.5)):
 
         # Decides if to take pictures in night or in day
         if ISS.at(t).is_sunlit(ephemeris):
-            logger.info("Waiting 15 seconds for next loop")
-            sleep(15)
+            logger.info("Waiting 17 seconds for next loop")
+            sleep(17)
             logger.info(f"Loop took {datetime.now() - now_time} to finish")
         else:
-            logger.info("Waiting 20 seconds for next loop")
-            sleep(20)
+            logger.info("Waiting 23 seconds for next loop")
+            sleep(23)
             logger.info(f"Loop took {datetime.now() - now_time} to finish")
             
 
