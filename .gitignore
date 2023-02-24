@@ -131,5 +131,3 @@ dmypy.json
 # Output
 *.csv
 /photos
-ground-vs-ocean-model.tflite
-ground-vs-ocean.txt
