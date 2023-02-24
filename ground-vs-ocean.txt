@@ -1,0 +1,3 @@
+0 dark
+1 ground
+2 ocean
