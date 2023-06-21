@@ -11,7 +11,7 @@ When saving each photo, the number of the photo, whether it was night or day, ti
 This program sorts all photos into three folders "dark", "ground" and "ocean" based on the decision of the trained model in the data.csv file. 
 
 ## Sample of our photos
-<img alt="image_0158" src="https://github.com/NewtonWasTaken/FiatLux/assets/84130106/7e548786-4e4f-4d24-97fc-4e36720a39c3" width="70%">
+<a href="https://goo.gl/maps/MpK4MJqKmc2GTndD8"><img alt="image_0158" src="https://github.com/NewtonWasTaken/FiatLux/assets/84130106/7e548786-4e4f-4d24-97fc-4e36720a39c3" width="70%"></a>
 <img alt="image_0148" src="https://github.com/NewtonWasTaken/FiatLux/assets/84130106/4f41d377-2af9-4629-be6c-379c628a0eae" width="70%">
 <img alt="image_0092" src="https://github.com/NewtonWasTaken/FiatLux/assets/84130106/b42d3a64-3a2a-4af6-be84-62587d54aea2" width="70%">
 <img alt="image_0308" src="https://github.com/NewtonWasTaken/FiatLux/assets/84130106/8cc835ce-c2b7-4db8-a4a6-d4c454a55055" width="70%">
