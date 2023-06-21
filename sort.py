@@ -8,9 +8,9 @@ from pathlib import Path
 base_folder = Path(__file__).parent.resolve()
 
 # Creates directories to move the photos
-os.mkdir("ocean")
-os.mkdir("ground")
-os.mkdir("dark")
+os.mkdir(f"{base_folder}/ocean")
+os.mkdir(f"{base_folder}/ground")
+os.mkdir(f"{base_folder}/dark")
 
 
 # Opens data.csv
