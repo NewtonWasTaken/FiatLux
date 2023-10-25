@@ -10,6 +10,9 @@ When saving each photo, the number of the photo, whether it was night or day, ti
 ### [Sort.py](sort.py)
 This program sorts all photos into three folders "dark", "ground" and "ocean" based on the decision of the trained model in the data.csv file. 
 
+## What did we discover?
+You can read more about our findings in final report [here] (FinalReport.pdf)
+
 ## Sample of our photos
 <img alt="image_0158" src="https://github.com/NewtonWasTaken/FiatLux/assets/84130106/7e548786-4e4f-4d24-97fc-4e36720a39c3" width="70%">
 <br>
